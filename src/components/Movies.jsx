@@ -3,6 +3,10 @@ import { getMovies } from '../services/fakeMovieService';
 function Movies() {
   const [movies, setMovies] = useState(getMovies());
 
+  const handleDelete = (movie) => {
+    const deleted_movies = movies.filter((m) => m._id !== movie._id);
+    setMovies(deleted_movies);
+  };
   return (
     <table className="table">
       <thead>
@@ -11,6 +15,7 @@ function Movies() {
           <th>Genre</th>
           <th>Stock</th>
           <th>Rate</th>
+          <th></th>
         </tr>
       </thead>
 
@@ -21,6 +26,14 @@ function Movies() {
             <td>{movie.genre.name}</td>
             <td>{movie.numberInStock}</td>
             <td>{movie.dailyRentalRate}</td>
+            <td>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => handleDelete(movie)}
+              >
+                Delete
+              </button>
+            </td>
           </tr>
         ))}
       </tbody>

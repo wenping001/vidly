@@ -5,6 +5,7 @@ import Like from './common/Like';
 import Pagination from './common/Pagination';
 import { paginate } from '../utils/paginate';
 import ListGroup from './common/ListGroup';
+import { Link } from 'react-router-dom';
 
 function Movies() {
   const pageSize = 4;
@@ -72,7 +73,9 @@ function Movies() {
           <tbody>
             {movies.map((movie) => (
               <tr key={movie._id}>
-                <td>{movie.title}</td>
+                <td>
+                  <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+                </td>
                 <td>{movie.genre.name}</td>
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate}</td>

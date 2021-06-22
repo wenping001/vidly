@@ -1,6 +1,7 @@
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 function Pagination(props) {
-  const { itemCount, pageSize } = props;
+  const { itemCount, pageSize, currentPage, onPageChange } = props;
   const pageCount = Math.ceil(itemCount / pageSize);
 
   if (pageCount === 1) return null;
@@ -13,14 +14,12 @@ function Pagination(props) {
         {pages.map((page) => (
           <li
             key={page}
-            className={
-              page === props.currentPage ? 'page-item active' : 'page-item'
-            }
+            className={page === currentPage ? 'page-item active' : 'page-item'}
           >
             <a
               className="page-link"
               onClick={() => {
-                props.onPageChange(page);
+                onPageChange(page);
               }}
               href="//#endregion"
             >
@@ -28,12 +27,15 @@ function Pagination(props) {
             </a>
           </li>
         ))}
-        {/* <li className="page-item">
-          <a className="page-link">1</a>
-        </li> */}
       </ul>
     </nav>
   );
 }
 
+Pagination.propTypes = {
+  itemCount: PropTypes.number.isRequired,
+  pageSize: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+};
 export default Pagination;

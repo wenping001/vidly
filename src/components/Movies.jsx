@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { getMovies } from '../services/fakeMovieService';
 import { getGenres } from '../services/fakeGenreService';
-import Like from './common/Like';
 import Pagination from './common/Pagination';
 import { paginate } from '../utils/paginate';
 import ListGroup from './common/ListGroup';
-import { Link } from 'react-router-dom';
+import MoviesTable from './MoviesTable';
 
 function Movies() {
   const pageSize = 4;
@@ -59,44 +58,11 @@ function Movies() {
       </div>
       <div className="col">
         <p>Showing {count} movies in the database.</p>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Genre</th>
-              <th>Stock</th>
-              <th>Rate</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {movies.map((movie) => (
-              <tr key={movie._id}>
-                <td>
-                  <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
-                </td>
-                <td>{movie.genre.name}</td>
-                <td>{movie.numberInStock}</td>
-                <td>{movie.dailyRentalRate}</td>
-                <td>
-                  <Like
-                    liked={movie?.liked}
-                    onClick={() => handleLike(movie)}
-                  />
-                </td>
-                <td>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDelete(movie)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <MoviesTable
+          movies={movies}
+          onClick={handleLike}
+          onDelete={handleDelete}
+        />
         <Pagination
           itemCount={count}
           pageSize={pageSize}

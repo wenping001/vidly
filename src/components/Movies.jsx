@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { React, useState } from 'react';
+import _ from 'lodash';
 import { getMovies } from '../services/fakeMovieService';
 import { getGenres } from '../services/fakeGenreService';
 import Pagination from './common/Pagination';
@@ -10,16 +11,13 @@ function Movies() {
   const pageSize = 4;
   const [allMovies, setMovies] = useState(getMovies());
   const [currentPage, setCurrentPage] = useState(1);
-
-  const [genres, setGenres] = useState([
-    { name: 'All Genres' },
-    ...getGenres(),
-  ]);
+  const genres = [{ id: '', name: 'All Genres' }, ...getGenres()];
   const [selectedGenre, setSelectedGenre] = useState();
+  const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' });
 
   const handleDelete = (movie) => {
-    const deleted_movies = allMovies.filter((m) => m._id !== movie._id);
-    setMovies(deleted_movies);
+    const deletedMovies = allMovies.filter((m) => m.id !== movie.id);
+    setMovies(deletedMovies);
   };
 
   const handleLike = (movie) => {
@@ -39,14 +37,22 @@ function Movies() {
     setSelectedGenre(genre);
   };
 
-  const filterd =
-    selectedGenre && selectedGenre._id
-      ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
-      : allMovies;
+  const handleSort = (value) => {
+    setSortColumn(value);
+  };
+
+  // filterd
+  const filterd = selectedGenre && selectedGenre.id
+    ? allMovies.filter((m) => m.genre.id === selectedGenre.id) : allMovies;
 
   const { length: count } = filterd;
+
   if (count === 0) return <p>There are no movies in the database.</p>;
-  const movies = paginate(filterd, currentPage, pageSize);
+  // sorting
+  const sorted = _.orderBy(filterd, [sortColumn.path], [sortColumn.order]);
+  // pagination
+  const movies = paginate(sorted, currentPage, pageSize);
+
   return (
     <div className="row">
       <div className="col-3">
@@ -57,11 +63,17 @@ function Movies() {
         />
       </div>
       <div className="col">
-        <p>Showing {count} movies in the database.</p>
+        <p>
+          Showing
+          {count}
+          movies in the database.
+        </p>
         <MoviesTable
           movies={movies}
+          sortColumn={sortColumn}
           onClick={handleLike}
           onDelete={handleDelete}
+          onSort={handleSort}
         />
         <Pagination
           itemCount={count}

@@ -1,15 +1,26 @@
 import React from 'react';
-import Like from './common/Like';
 import { Link } from 'react-router-dom';
-function MoviesTable({ movies, onDelete, onClick }) {
+import Like from './common/Like';
+
+function MoviesTable({ movies, sortColumn, onDelete, onClick, onSort }) {
+  const raiseSort = (path) => {
+    const sc = { ...sortColumn };
+    if (sc.path === path) {
+      sc.order = sc.order === 'asc' ? 'desc' : 'asc';
+    } else {
+      sc.path = path;
+      sc.order = 'asc';
+    }
+    onSort(sc);
+  };
   return (
     <table className="table">
       <thead>
         <tr>
-          <th>Title</th>
-          <th>Genre</th>
-          <th>Stock</th>
-          <th>Rate</th>
+          <th onClick={() => raiseSort('title')}>Title</th>
+          <th onClick={() => raiseSort('genre.name')}>Genre</th>
+          <th onClick={() => raiseSort('numberInStock')}>Stock</th>
+          <th onClick={() => raiseSort('dailyRentalRate')}>Rate</th>
           <th></th>
           <th></th>
         </tr>

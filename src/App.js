@@ -1,15 +1,16 @@
-import Movies from './components/Movies';
-import Customer from './components/Customer';
-import Rental from './components/Rental';
+import Movies from "./components/Movies";
+import Customer from "./components/Customer";
+import Rental from "./components/Rental";
 import {
   BrowserRouter as Router,
   Link,
   Route,
   Switch,
   Redirect,
-} from 'react-router-dom';
-import NotFound from './components/NotFound';
-import MovieForm from './components/common/MovieForm';
+} from "react-router-dom";
+import NotFound from "./components/NotFound";
+import MovieForm from "./components/common/MovieForm";
+import LoginForm from "./components/LoginForm";
 function App() {
   return (
     <div className="App">
@@ -30,6 +31,9 @@ function App() {
           <Link className="nav-link" to="/rental">
             Rental
           </Link>
+          <Link className="nav-link" to="/login">
+            Login
+          </Link>
         </nav>
 
         <main className="container">
@@ -43,6 +47,9 @@ function App() {
             </Route>
             <Route path="/rental">
               <Rental />
+            </Route>
+            <Route path="/login">
+              <LoginForm />
             </Route>
             <Route path="/not-found" component={NotFound} />
             <Redirect from="/" exact to="/movies" />

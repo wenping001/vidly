@@ -1,20 +1,27 @@
-import { React, useState } from 'react';
-import _ from 'lodash';
-import { getMovies } from '../services/fakeMovieService';
-import { getGenres } from '../services/fakeGenreService';
-import Pagination from './common/Pagination';
-import { paginate } from '../utils/paginate';
-import ListGroup from './common/ListGroup';
-import MoviesTable from './MoviesTable';
+import { useState, useEffect } from "react";
+import _ from "lodash";
+import { getMovies } from "../services/fakeMovieService";
+import { getGenres } from "../services/fakeGenreService";
+import Pagination from "./common/Pagination";
+import { paginate } from "../utils/paginate";
+import ListGroup from "./common/ListGroup";
+import MoviesTable from "./MoviesTable";
 
 function Movies() {
   const pageSize = 4;
-  const [allMovies, setMovies] = useState(getMovies());
+  const [allMovies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const genres = [{ id: '', name: 'All Genres' }, ...getGenres()];
-  const [selectedGenre, setSelectedGenre] = useState();
-  const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' });
+  const [genres, setGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState({
+    _id: "",
+    name: "All Genres",
+  });
+  const [sortColumn, setSortColumn] = useState({ path: "title", order: "asc" });
 
+  useEffect(() => {
+    setMovies(getMovies());
+    setGenres([{ _id: "", name: "All Genres" }, ...getGenres()]);
+  }, []);
   const handleDelete = (movie) => {
     const deletedMovies = allMovies.filter((m) => m.id !== movie.id);
     setMovies(deletedMovies);
@@ -42,8 +49,10 @@ function Movies() {
   };
 
   // filterd
-  const filterd = selectedGenre && selectedGenre.id
-    ? allMovies.filter((m) => m.genre.id === selectedGenre.id) : allMovies;
+  const filterd =
+    selectedGenre && selectedGenre["_id"]
+      ? allMovies.filter((m) => m.genre["_id"] === selectedGenre["_id"])
+      : allMovies;
 
   const { length: count } = filterd;
 
@@ -63,11 +72,7 @@ function Movies() {
         />
       </div>
       <div className="col">
-        <p>
-          Showing
-          {count}
-          movies in the database.
-        </p>
+        <p>Showing {count} movies in the database.</p>
         <MoviesTable
           movies={movies}
           sortColumn={sortColumn}

@@ -11,11 +11,11 @@ function ListGroup({
         <li
           key={genre[valueProperty]}
           className={
-            selectedGenre === genre
-              ? 'list-group-item active'
-              : 'list-group-item'
+            selectedGenre.name === genre.name
+              ? "list-group-item active"
+              : "list-group-item"
           }
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: "pointer" }}
           onClick={() => onItemSelect(genre)}
         >
           {genre[textProperty]}
@@ -26,7 +26,7 @@ function ListGroup({
 }
 
 ListGroup.defaultProps = {
-  textProperty: 'name',
-  valueProperty: '_id',
+  textProperty: "name",
+  valueProperty: "_id",
 };
 export default ListGroup;
